@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  scala:
+  deployCoverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,11 +25,12 @@ jobs:
         with:
           java-version: 21
           distribution: corretto
+          cache: 'sbt'
 
       - name: Build and Test with Coverage
         run: |
-          sbt -v "coverage test"
-          sbt -v "coverageReport"
+          sbt coverage test
+          sbt coverageReport
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
