@@ -27,6 +27,9 @@ jobs:
         distribution: corretto
         cache: 'sbt'
 
+    - name: Set up SBT
+      uses: sbt/setup-sbt@v1
+
     - name: Build and Test with Coverage
       run: |
         sbt coverage test
