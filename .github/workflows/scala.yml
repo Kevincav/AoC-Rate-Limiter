@@ -15,10 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  scala:
-    strategy:
-      matrix:
-        package: [ libs, utils, year2024 ]
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,13 +26,12 @@ jobs:
           java-version: 21
           distribution: corretto
 
-      - name: Set AoC Data
+      - name: Build and Test with Coverage
         run: |
-          echo "AOC_COOKIE_SESSION=${{ secrets.AOC_COOKIE_SESSION }}" >> ${GITHUB_ENV}
-          echo "AOC_USER_AGENT=${{ secrets.AOC_USER_AGENT }}" >> ${GITHUB_ENV}
-          echo "AOC_SUBMIT_ANSWERS=${{ secrets.AOC_SUBMIT_ANSWERS }}" >> ${GITHUB_ENV}
-          echo "AOC_SUBMISSION_THROTTLE=${{ secrets.AOC_SUBMISSION_THROTTLE }}" >> ${GITHUB_ENV}
+          sbt coverage test
+          sbt coverageReport
 
-      - name: Run Main
-        run: sbt -v "+test:testOnly org.advent.${{ matrix.package }}.*"
-
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
