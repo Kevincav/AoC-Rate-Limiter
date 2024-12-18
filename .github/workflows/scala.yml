@@ -28,8 +28,8 @@ jobs:
 
       - name: Build and Test with Coverage
         run: |
-          sbt coverage test
-          sbt coverageReport
+          sbt -v "coverage test"
+          sbt -v "coverageReport"
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
