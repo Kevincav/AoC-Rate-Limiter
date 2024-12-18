@@ -16,9 +16,9 @@ class RateLimiterDAOTest extends AnyFunSuite with Matchers {
     implicit val databaseDetails: DatabaseDetails = DatabaseDetails("unit_test", s"jdbc:sqlite:$databasePath")
 
     assert(RateLimiterDAO().findByPrimaryKey(2000, 1, 1).unsafeRunSync().isLeft)
-    assert(RateLimiterDAO().createTable.unsafeRunSync().isRight)
+    RateLimiterDAO().createTable.unsafeRunSync()
     assert(RateLimiterDAO().findByPrimaryKey(2000, 1, 1).unsafeRunSync().isRight)
-    assert(RateLimiterDAO().dropTable.unsafeRunSync().isRight)
+    RateLimiterDAO().dropTable.unsafeRunSync()
     assert(RateLimiterDAO().findByPrimaryKey(2000, 1, 1).unsafeRunSync().isLeft)
 
     Files.deleteIfExists(databasePath)
@@ -28,7 +28,8 @@ class RateLimiterDAOTest extends AnyFunSuite with Matchers {
     val databasePath = Files.createTempFile("sqlite.database.", ".db")
     implicit val databaseDetails: DatabaseDetails = DatabaseDetails("unit_test", s"jdbc:sqlite:$databasePath")
 
-    assert(RateLimiterDAO().createTable.unsafeRunSync().isRight)
+    assert(RateLimiterDAO().insertOrReplace(2000, 1, 1, true, 1, FiniteDuration(1000, TimeUnit.MINUTES)).unsafeRunSync().isLeft)
+    RateLimiterDAO().createTable.unsafeRunSync()
     assert(RateLimiterDAO().findByPrimaryKey(2000, 1, 1).unsafeRunSync().isRight)
     assert(RateLimiterDAO().insertOrReplace(2000, 1, 1, true, 1, FiniteDuration(1000, TimeUnit.MINUTES)).unsafeRunSync().isRight)
     val result = RateLimiterDAO().findByPrimaryKey(2000, 1, 1).unsafeRunSync()
@@ -43,7 +44,7 @@ class RateLimiterDAOTest extends AnyFunSuite with Matchers {
       assert(output.get.updateTime == FiniteDuration(1000, TimeUnit.MINUTES))
     }
 
-    assert(RateLimiterDAO().dropTable.unsafeRunSync().isRight)
+    RateLimiterDAO().dropTable.unsafeRunSync()
     Files.deleteIfExists(databasePath)
   }
 }

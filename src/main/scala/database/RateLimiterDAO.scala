@@ -29,29 +29,25 @@ case class RateLimiterDAO()(implicit databaseDetails: DatabaseDetails = Database
     DriverManager.getConnection(databaseDetails.databaseName)
   }
 
-  def createTable: IO[Either[Throwable, Int]] = IO {
-    try {
-      using(getConnection.createStatement()) { ps =>
-        Right(ps.executeUpdate(
-          s"""|CREATE TABLE IF NOT EXISTS ${databaseDetails.tableName} (
-              |    year INTEGER NOT NULL,
-              |    day INTEGER NOT NULL,
-              |    part INTEGER NOT NULL,
-              |    isSolved BOOLEAN NOT NULL,
-              |    answer INTEGER,
-              |    updateTime INTEGER,
-              |    PRIMARY KEY (year, day, part)
-              |)""".stripMargin))
-      }
-    } catch { case ex: Throwable => Left(ex) }
+  def createTable: IO[Unit] = IO {
+    using(getConnection.createStatement()) { ps =>
+      ps.executeUpdate(
+        s"""|CREATE TABLE IF NOT EXISTS ${databaseDetails.tableName} (
+            |    year INTEGER NOT NULL,
+            |    day INTEGER NOT NULL,
+            |    part INTEGER NOT NULL,
+            |    isSolved BOOLEAN NOT NULL,
+            |    answer INTEGER,
+            |    updateTime INTEGER,
+            |    PRIMARY KEY (year, day, part)
+            |)""".stripMargin)
+    }
   }
 
-  def dropTable: IO[Either[Throwable, Int]] = IO {
-    try {
-      using(getConnection.createStatement()) { ps =>
-        Right(ps.executeUpdate(s"""|DROP TABLE IF EXISTS ${databaseDetails.tableName}""".stripMargin))
-      }
-    } catch { case ex: Throwable => Left(ex) }
+  def dropTable: IO[Unit] = IO {
+    using(getConnection.createStatement()) { ps =>
+      ps.executeUpdate(s"""|DROP TABLE IF EXISTS ${databaseDetails.tableName}""".stripMargin)
+    }
   }
 
   def findByPrimaryKey(year: Int, day: Int, part: Int): IO[Either[Throwable, Option[Row]]] =
