@@ -23,7 +23,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT license][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
