@@ -5,7 +5,7 @@ lazy val root = project
   .settings(
     name := "rate-limiter",
     organization := "io.github.kevincav",
-    version := "v1.0.0",
+    version := "v1.0.1",
     scalaVersion := "3.6.2",
     crossScalaVersions := Seq("3.6.2"),
     idePackagePrefix := Some("rate.limiter"),
