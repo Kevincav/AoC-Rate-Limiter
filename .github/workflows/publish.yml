@@ -11,23 +11,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check secrets
-        id: secrets-check
-        run: |
-            if [ -z "${{ secrets.SONATYPE_USERNAME }}" ]; then echo "❌ SONATYPE_USERNAME not set"; else echo "✅ SONATYPE_USERNAME set"; fi
-            if [ -z "${{ secrets.SONATYPE_PASSWORD }}" ]; then echo "❌ SONATYPE_PASSWORD not set"; else echo "✅ SONATYPE_PASSWORD set"; fi
-            if [ -z "${{ secrets.PGP_SECRET }}" ]; then echo "❌ PGP_SECRET not set"; else echo "✅ PGP_SECRET set"; fi
-            if [ -z "${{ secrets.PGP_PASSPHRASE }}" ]; then echo "❌ PGP_PASSPHRASE not set"; else echo "✅ PGP_PASSPHRASE set"; fi
-
-      - name: Debug Environment Variables
-        run: |
-          echo "GITHUB_REF: $GITHUB_REF"
-          echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
-          echo "SONATYPE_USERNAME is set: ${{ secrets.SONATYPE_USERNAME != '' }}"
-          echo "SONATYPE_PASSWORD is set: ${{ secrets.SONATYPE_PASSWORD != '' }}"
-          echo "PGP_SECRET is set: ${{ secrets.PGP_SECRET != '' }}"
-          echo "PGP_PASSPHRASE is set: ${{ secrets.PGP_PASSPHRASE != '' }}"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -39,12 +22,6 @@ jobs:
 
       - name: Set up SBT
         uses: sbt/setup-sbt@v1
-
-      - name: Set up GPG
-        run: |
-          echo "$PGP_SECRET" | base64 --decode | gpg --batch --import
-        env:
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
 
       - name: Release
         run: sbt ci-release

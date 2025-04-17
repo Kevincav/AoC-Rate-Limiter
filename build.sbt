@@ -15,7 +15,7 @@ lazy val root = project
 
     //sonatype
     publishTo := sonatypePublishToBundle.value,
-    sonatypeCredentialHost := "s01.oss.sonatype.org", //or oss.sonatype.org
+    sonatypeCredentialHost := "oss.sonatype.org", //or s01.oss.sonatype.org
 
     // Additional settings for Maven Central
     licenses := Seq("MIT License" -> url("https://opensource.org/license/mit")),
