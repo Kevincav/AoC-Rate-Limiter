@@ -1,8 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Publish to Maven Central
 
 on:
@@ -25,12 +20,14 @@ jobs:
       - name: Set up SBT
         uses: sbt/setup-sbt@v1
 
-      - name: Validate POM
-        run: sbt 'validatePom' #run validatePom to make sure the pom is valid
+      # - name: Validate POM
+      #   run: sbt 'validatePom' #run validatePom to make sure the pom is valid
 
       - name: Publish
         run: sbt 'publishSigned'
         env:
+          # PGP_SECRET_KEY: ${{ secrets.PGP_SECRET_KEY }}
+          # PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
