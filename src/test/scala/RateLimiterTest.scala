@@ -5,6 +5,8 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import utils.{DatabaseDetails, Status}
 
+import cats.effect.IO
+
 import java.nio.file.Files
 import scala.concurrent.duration.*
 
@@ -16,13 +18,13 @@ class RateLimiterTest extends AnyFunSuite with Matchers {
     val databasePath = Files.createTempFile("sqlite.database.", ".db")
     implicit val databaseDetails: DatabaseDetails = DatabaseDetails("unit_test", s"jdbc:sqlite:$databasePath")
 
-    val result = RateLimiter(2000, 1).execute(1)((getAnswer(1L), isSolved(false))).unsafeRunSync()
+    val result = RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(1L), isSolved(false)))).unsafeRunSync()
     assert(result.status == Status.SUCCESS)
     assert(!result.isSolved.get)
     assert(result.answer.get == 1L)
     assert(result.timeRemaining.get.toMinutes == 5.minutes.fromNow.timeLeft.toMinutes)
 
-    val result2 = RateLimiter(2000, 1).execute(1)((getAnswer(1L), isSolved(false))).unsafeRunSync()
+    val result2 = RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(1L), isSolved(false)))).unsafeRunSync()
     assert(result2.status == Status.WAITING)
     assert(result2.timeRemaining.get.toMinutes == 5.minutes.fromNow.timeLeft.toMinutes)
 
@@ -33,13 +35,13 @@ class RateLimiterTest extends AnyFunSuite with Matchers {
     val databasePath = Files.createTempFile("sqlite.database.", ".db")
     implicit val databaseDetails: DatabaseDetails = DatabaseDetails("unit_test", s"jdbc:sqlite:$databasePath")
 
-    val result = RateLimiter(2000, 1).execute(1)((getAnswer(1L), isSolved(true))).unsafeRunSync()
+    val result = RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(1L), isSolved(true)))).unsafeRunSync()
     assert(result.status == Status.SUCCESS)
     assert(result.isSolved.get)
     assert(result.answer.get == 1L)
     assert(result.timeRemaining.get.toMinutes == 5.minutes.fromNow.timeLeft.toMinutes)
 
-    val result2 = RateLimiter(2000, 1).execute(1)((getAnswer(2L), isSolved(false))).unsafeRunSync()
+    val result2 = RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(2L), isSolved(false)))).unsafeRunSync()
     assert(result2.status == Status.SOLVED)
     assert(result.isSolved.get)
     assert(result.answer.get == 1L)
@@ -52,13 +54,13 @@ class RateLimiterTest extends AnyFunSuite with Matchers {
     val databasePath = Files.createTempFile("sqlite.database.", ".db")
     implicit val databaseDetails: DatabaseDetails = DatabaseDetails("unit_test", s"jdbc:sqlite:$databasePath", 0.minutes.fromNow.time)
 
-    val result = RateLimiter(2000, 1).execute(1)((getAnswer(1L), isSolved(false))).unsafeRunSync()
+    val result = RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(1L), isSolved(false)))).unsafeRunSync()
     assert(result.status == Status.SUCCESS)
     assert(!result.isSolved.get)
     assert(result.answer.get == 1L)
     assert(result.timeRemaining.get.toMinutes == 0.minutes.fromNow.timeLeft.toMinutes)
 
-    val result2 = RateLimiter(2000, 1).execute(1)((getAnswer(2L), isSolved(false))).unsafeRunSync()
+    val result2 = RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(2L), isSolved(false)))).unsafeRunSync()
     assert(result2.status == Status.SUCCESS)
     assert(!result2.isSolved.get)
     assert(result2.answer.get == 2L)
@@ -74,7 +76,7 @@ class RateLimiterTest extends AnyFunSuite with Matchers {
     val resultError = RateLimiter(2000, 1).check(1).unsafeRunSync()
     assert(resultError.status == Status.ERROR)
 
-    RateLimiter(2000, 1).execute(2)((getAnswer(1L), isSolved(false))).unsafeRunSync()
+    RateLimiter(2000, 1).execute(2)(IO.pure((getAnswer(1L), isSolved(false)))).unsafeRunSync()
     assert(RateLimiter(2000, 1).check(1).unsafeRunSync().status == Status.NO_RESULTS)
     assert(RateLimiter(2000, 1).check(2).unsafeRunSync().status == Status.READY)
 
@@ -85,8 +87,8 @@ class RateLimiterTest extends AnyFunSuite with Matchers {
     val databasePath = Files.createTempFile("sqlite.database.", ".db")
     implicit val databaseDetails: DatabaseDetails = DatabaseDetails("unit_test", s"jdbc:sqlite:$databasePath")
 
-    RateLimiter(2000, 1).execute(1)((getAnswer(1L), isSolved(false))).unsafeRunSync()
-    RateLimiter(2000, 1).execute(2)((getAnswer(1L), isSolved(true))).unsafeRunSync()
+    RateLimiter(2000, 1).execute(1)(IO.pure((getAnswer(1L), isSolved(false)))).unsafeRunSync()
+    RateLimiter(2000, 1).execute(2)(IO.pure((getAnswer(1L), isSolved(true)))).unsafeRunSync()
 
     assert(RateLimiter(2000, 1).check(1).unsafeRunSync().status == Status.WAITING)
     assert(RateLimiter(2000, 1).check(2).unsafeRunSync().status == Status.SOLVED)

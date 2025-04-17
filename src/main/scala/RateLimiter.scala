@@ -20,13 +20,13 @@ case class RateLimiter(year: Int, day: Int)(implicit databaseDetails: DatabaseDe
         }
       }
 
-  def execute(part: Int)(codeBlock: => (Long, Boolean)): IO[Result] =
+  def execute(part: Int)(codeBlock: => IO [(Any, Boolean)]): IO[Result] =
     RateLimiterDAO().createTable.flatMap { _ =>
       check(part).flatMap {
         case Result(status, deadline, answer, isSolved) if status != Status.READY && status != Status.NO_RESULTS =>
           IO.pure(Result(status, deadline, answer, isSolved))
         case _ => for {
-          (answer, isSolved) <- IO.pure(codeBlock)
+          (answer, isSolved) <- codeBlock
           _ <- RateLimiterDAO().insertOrReplace(year, day, part, isSolved, answer, databaseDetails.timeRemaining)
         } yield Result(Status.SUCCESS, Some(Deadline(databaseDetails.timeRemaining).timeLeft), Some(answer), Some(isSolved))
       }

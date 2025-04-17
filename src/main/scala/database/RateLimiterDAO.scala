@@ -1,7 +1,8 @@
-package rate.limiter.database
+package rate.limiter
+package database
 
 import cats.effect.IO
-import rate.limiter.utils.DatabaseDetails
+import utils.DatabaseDetails
 
 import java.sql.{Connection, DriverManager, ResultSet}
 import java.util.concurrent.TimeUnit
@@ -70,7 +71,7 @@ case class RateLimiterDAO()(implicit databaseDetails: DatabaseDetails = Database
       } catch { case ex: Throwable => Left(ex) }
     }
 
-  def insertOrReplace(year: Int, day: Int, part: Int, isSolved: Boolean, answer: Long, updateTime: FiniteDuration): IO[Either[Throwable, Int]] =
+  def insertOrReplace(year: Int, day: Int, part: Int, isSolved: Boolean, answer: Any, updateTime: FiniteDuration): IO[Either[Throwable, Int]] =
     IO {
       try {
         using(getConnection.prepareStatement(
@@ -89,7 +90,7 @@ case class RateLimiterDAO()(implicit databaseDetails: DatabaseDetails = Database
           ps.setInt(2, day)
           ps.setInt(3, part)
           ps.setBoolean(4, isSolved)
-          ps.setLong(5, answer)
+          ps.setString(5, answer.toString)
           ps.setLong(6, updateTime.toNanos)
           Right(ps.executeUpdate())
         }}

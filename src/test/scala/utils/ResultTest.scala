@@ -1,4 +1,5 @@
-package rate.limiter.utils
+package rate.limiter
+package utils
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
