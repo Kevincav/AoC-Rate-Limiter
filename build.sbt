@@ -4,7 +4,7 @@ lazy val root = project
     name := "Rate Limiter",
     version := "1.0.0",
     scalaVersion := "3.6.2",
-    crossScalaVersions := Seq("2.13.12", "3.6.2"),
+    crossScalaVersions := Seq("3.6.2"),
     idePackagePrefix := Some("org.rate.limiter"),
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % "3.6.1",
