@@ -2,7 +2,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Rate Limiter",
-    version := "1.0.0",
+    version := "1.0.1",
     scalaVersion := "3.6.2",
     idePackagePrefix := Some("org.rate.limiter"),
     libraryDependencies ++= Seq(
