@@ -3,7 +3,7 @@ import xerial.sbt.Sonatype.sonatypeCentralHost
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "Rate Limiter",
+    name := "Advent of Code Rate Limiter",
     version := "v1.0.0",
     scalaVersion := "3.6.2",
     crossScalaVersions := Seq("3.6.2"),
@@ -18,12 +18,6 @@ lazy val root = project
     //sonatype
     publishTo := sonatypePublishToBundle.value,
     sonatypeCredentialHost := sonatypeCentralHost,
-
-    credentials += Credentials("Sonatype Nexus Repository Manager",
-      "s01.oss.sonatype.org", // <-- This host name needs to have s01 prefix
-      sys.env("SONATYPE_USERNAME"),
-      sys.env("SONATYPE_PASSWORD")
-    ),
 
     // Additional settings for Maven Central
     licenses := Seq("MIT License" -> url("https://opensource.org/license/mit")),
