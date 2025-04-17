@@ -3,11 +3,12 @@ import xerial.sbt.Sonatype.sonatypeCentralHost
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "Advent of Code Rate Limiter",
+    name := "Rate Limiter",
+    organization := "io.github.kevincav",
     version := "v1.0.0",
     scalaVersion := "3.6.2",
     crossScalaVersions := Seq("3.6.2"),
-    idePackagePrefix := Some("org.rate.limiter"),
+    idePackagePrefix := Some("rate.limiter"),
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % "3.6.1",
       "org.xerial" % "sqlite-jdbc" % "3.49.1.0",

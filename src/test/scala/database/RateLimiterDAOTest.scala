@@ -1,9 +1,9 @@
-package org.rate.limiter.database
+package rate.limiter.database
 
 import cats.effect.unsafe.implicits.global
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import org.rate.limiter.utils.DatabaseDetails
+import rate.limiter.utils.DatabaseDetails
 
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit

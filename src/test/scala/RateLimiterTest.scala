@@ -1,4 +1,4 @@
-package org.rate.limiter
+package rate.limiter
 
 import cats.effect.unsafe.implicits.global
 import org.scalatest.funsuite.AnyFunSuite

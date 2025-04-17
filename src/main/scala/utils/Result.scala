@@ -1,4 +1,4 @@
-package org.rate.limiter.utils
+package rate.limiter.utils
 
 import scala.concurrent.duration.*
 

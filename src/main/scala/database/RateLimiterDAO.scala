@@ -1,7 +1,7 @@
-package org.rate.limiter.database
+package rate.limiter.database
 
 import cats.effect.IO
-import org.rate.limiter.utils.DatabaseDetails
+import rate.limiter.utils.DatabaseDetails
 
 import java.sql.{Connection, DriverManager, ResultSet}
 import java.util.concurrent.TimeUnit
