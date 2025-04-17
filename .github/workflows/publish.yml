@@ -12,19 +12,19 @@ jobs:
       - name: Check secrets
         id: secrets-check
         run: |
-          if [[ -z "${{ secrets.SONATYPE_USERNAME }}" || -z "${{ secrets.SONATYPE_PASSWORD }}" || -z "${{ secrets.PGP_SECRET }}" || -z "${{ secrets.PGP_PASSPHRASE }}" ]]; then
-            echo "Missing one or more required secrets. Skipping publish."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "All required secrets found."
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
+            if [ -z "${{ secrets.SONATYPE_USERNAME }}" ]; then echo "❌ SONATYPE_USERNAME not set"; else echo "✅ SONATYPE_USERNAME set"; fi
+            if [ -z "${{ secrets.SONATYPE_PASSWORD }}" ]; then echo "❌ SONATYPE_PASSWORD not set"; else echo "✅ SONATYPE_PASSWORD set"; fi
+            if [ -z "${{ secrets.PGP_SECRET }}" ]; then echo "❌ PGP_SECRET not set"; else echo "✅ PGP_SECRET set"; fi
+            if [ -z "${{ secrets.PGP_PASSPHRASE }}" ]; then echo "❌ PGP_PASSPHRASE not set"; else echo "✅ PGP_PASSPHRASE set"; fi
 
-      - name: Exit if secrets are missing
-        if: steps.secrets-check.outputs.skip == 'true'
+      - name: Debug Environment Variables
         run: |
-          echo "Required secrets not found. Exiting workflow."
-          exit 0
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
+          echo "SONATYPE_USERNAME is set: ${{ secrets.SONATYPE_USERNAME != '' }}"
+          echo "SONATYPE_PASSWORD is set: ${{ secrets.SONATYPE_PASSWORD != '' }}"
+          echo "PGP_SECRET is set: ${{ secrets.PGP_SECRET != '' }}"
+          echo "PGP_PASSPHRASE is set: ${{ secrets.PGP_PASSPHRASE != '' }}"
 
       - name: Checkout code
         uses: actions/checkout@v4
