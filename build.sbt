@@ -1,3 +1,4 @@
+
 lazy val root = project
   .in(file("."))
   .settings(
@@ -15,15 +16,9 @@ lazy val root = project
 
     //sonatype
     publishTo := sonatypePublishToBundle.value,
-    sonatypeCredentialHost := "s01.oss.sonatype.org",
+    sonatypeCredentialHost := xerial.sbt.Sonatype.sonatypeCentralHost,
 
-    credentials += Credentials("Sonatype Nexus Repository Manager",
-      "s01.oss.sonatype.org", // <-- This host name needs to have s01 prefix
-      sys.env("SONATYPE_USERNAME"),
-      sys.env("SONATYPE_PASSWORD")
-    ),
-
-      // Additional settings for Maven Central
+    // Additional settings for Maven Central
     licenses := Seq("MIT License" -> url("https://opensource.org/license/mit")),
     homepage := Some(url("https://github.com/Kevincav/AoC-Rate-Limiter")), // Replace
     scmInfo := Some(
