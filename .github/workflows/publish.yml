@@ -20,19 +20,10 @@ jobs:
       - name: Set up SBT
         uses: sbt/setup-sbt@v1
 
-      # - name: Validate POM
-      #   run: sbt 'validatePom' #run validatePom to make sure the pom is valid
-
-      - name: Publish
-        run: sbt 'publish'
-        env:
-          # PGP_SECRET_KEY: ${{ secrets.PGP_SECRET_KEY }}
-          # PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-
       - name: Release
-        run: sbt 'sonatypeBundleRelease'
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PGP_SECRET_KEY: ${{ secrets.PGP_SECRET_KEY }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+        run: sbt ci-release
