@@ -9,16 +9,42 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check secrets
+        id: secrets-check
+        run: |
+          if [[ -z "${{ secrets.SONATYPE_USERNAME }}" || -z "${{ secrets.SONATYPE_PASSWORD }}" || -z "${{ secrets.PGP_SECRET_KEY }}" || -z "${{ secrets.PGP_PASSPHRASE }}" ]]; then
+            echo "Missing one or more required secrets. Skipping publish."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "All required secrets found."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Set up JDK 21
+      - name: Exit if secrets are missing
+        if: steps.secrets-check.outputs.skip == 'true'
+        run: |
+          echo "Required secrets not found. Exiting workflow."
+          exit 0
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: 21
-          distribution: corretto
+          distribution: 'temurin'
+          java-version: 17
 
-      - name: Set up SBT
-        uses: sbt/setup-sbt@v1
+      - name: Cache sbt
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+            ~/.coursier
+          key: sbt-${{ runner.os }}-${{ hashFiles('**/build.sbt') }}
+          restore-keys: |
+            sbt-${{ runner.os }}-
 
       - name: Set up GPG
         run: |
