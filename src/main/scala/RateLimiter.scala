@@ -5,7 +5,6 @@ import utils.{DatabaseDetails, Result, Status}
 
 import cats.effect.IO
 
-import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.*
 
 case class RateLimiter(year: Int, day: Int)(implicit databaseDetails: DatabaseDetails = DatabaseDetails()) {

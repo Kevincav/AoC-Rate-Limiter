@@ -4,7 +4,6 @@ import cats.effect.unsafe.implicits.global
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.rate.limiter.utils.DatabaseDetails
-import org.sqlite.SQLiteException
 
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit

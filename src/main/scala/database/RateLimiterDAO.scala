@@ -1,14 +1,11 @@
 package org.rate.limiter.database
 
-import cats.effect.{IO, Resource}
+import cats.effect.IO
 import org.rate.limiter.utils.DatabaseDetails
 
-import java.io.File
-import java.nio.file.{Files, Path}
 import java.sql.{Connection, DriverManager, ResultSet}
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
-import scala.io.Source
 import scala.language.reflectiveCalls
 
 case class Row(resultSet: ResultSet) {

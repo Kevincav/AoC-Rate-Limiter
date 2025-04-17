@@ -3,10 +3,9 @@ package org.rate.limiter
 import cats.effect.unsafe.implicits.global
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import utils.{DatabaseDetails, Result, Status}
+import utils.{DatabaseDetails, Status}
 
-import java.nio.file.{Files, Path}
-import java.util.concurrent.TimeUnit
+import java.nio.file.Files
 import scala.concurrent.duration.*
 
 def getAnswer(answer: Long): Long = answer

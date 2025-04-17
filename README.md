@@ -23,6 +23,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT license][license-shield]][license-url]
+[![Coverage Status][coveralls-image]][coveralls-link]
 
 
 
@@ -259,3 +260,5 @@ Project Link: [https://github.com/Kevincav/AoC-Rate-Limiter](https://github.com/
 [Github-actions-url]: https://github.com/features/actions
 [SQLite.js]: https://img.shields.io/badge/SQLite-20232A?style=for-the-badge&logo=sqlite&logoColor=61DAFB
 [SQLite-url]: https://www.sqlite.org/
+[coveralls-image]:  https://coveralls.io/repos/tkqubo/scala-html-to-markdown/badge.svg?branch=master&service=github
+[coveralls-link]:   https://coveralls.io/github/tkqubo/scala-html-to-markdown?branch=master
