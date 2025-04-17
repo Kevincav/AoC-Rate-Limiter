@@ -3,7 +3,7 @@ import xerial.sbt.Sonatype.sonatypeCentralHost
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "Rate Limiter",
+    name := "rate-limiter",
     organization := "io.github.kevincav",
     version := "v1.0.0",
     scalaVersion := "3.6.2",
