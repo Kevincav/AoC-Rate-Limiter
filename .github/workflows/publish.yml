@@ -24,7 +24,7 @@ jobs:
       #   run: sbt 'validatePom' #run validatePom to make sure the pom is valid
 
       - name: Publish
-        run: sbt 'publishSigned'
+        run: sbt 'publish'
         env:
           # PGP_SECRET_KEY: ${{ secrets.PGP_SECRET_KEY }}
           # PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
